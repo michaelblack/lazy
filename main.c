@@ -2,38 +2,13 @@
 #include <stdio.h>
 #include "pairs.h"
 
-void print_int(void * num) {
-  printf("%d ", (int) num);
-}
-
-void * add1(void * n) {
-  return (void *)(1 + (int)n);
-}
-
-void * times2(void * n) {
-  return (void *)(2 * (int) n);
-}
-
-int odd(void * n) {
-  return ((int)n)%2 != 0;
-}
-
-void * add(void * a, void * b) {
-  return (void *)((int) a + (int)b);
-}
-
-void * id(void * a) {
-  return a;
-}
-
-pair * fibs_unfolder(void * acc) {
-  void * fst = first((pair *)acc);
-  void * snd = second((pair *)acc);
-  void * added = (void *)((int)fst + (int)snd); 
-  return pairup( added,
-		 (void *)(pairup(snd, added)));
-}
-  
+void print_int(void * num);
+void * add1(void * n);
+void * times2(void * n);
+int odd(void * n);
+void * add(void * a, void * b);
+void * id(void * a);
+pair * fibs_unfolder(void * acc)  ;
 
 int main() {
 
@@ -71,4 +46,36 @@ int main() {
   foreach( &print_int, take(15, fibonaccis));
   puts("\n");
 
+}
+
+void print_int(void * num) {
+  printf("%d ", (int) num);
+}
+
+void * add1(void * n) {
+  return (void *)(1 + (int)n);
+}
+
+void * times2(void * n) {
+  return (void *)(2 * (int) n);
+}
+
+int odd(void * n) {
+  return ((int)n)%2 != 0;
+}
+
+void * add(void * a, void * b) {
+  return (void *)((int) a + (int)b);
+}
+
+void * id(void * a) {
+  return a;
+}
+
+pair * fibs_unfolder(void * acc) {
+  void * fst = first((pair *)acc);
+  void * snd = second((pair *)acc);
+  void * added = (void *)((int)fst + (int)snd); 
+  return pairup( added,
+		 (void *)(pairup(snd, added)));
 }
