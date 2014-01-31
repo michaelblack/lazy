@@ -8,7 +8,7 @@ void * times2(void * n);
 int odd(void * n);
 void * add(void * a, void * b);
 void * id(void * a);
-pair * fibs_unfolder(void * acc)  ;
+pair * fibs_unfolder(void * acc);
 
 int main() {
 
