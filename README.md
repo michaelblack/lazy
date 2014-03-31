@@ -2,7 +2,7 @@ Lazy
 ====
 
 An implementation of delayed evaluation and streams in c.
-
+The main.c file contains a small program to test the libraries, the make file will build it into `tester`.
 
 lazy.h
 ------
