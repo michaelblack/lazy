@@ -8,6 +8,7 @@ lazy.h
 ------
 lazy.h contains four functions that work with 'promises'. A promise is a stucture that holds information on how to call a function with already given arguments.
 
+| t | t | t |
 | --- | --- | --- |
 | promise * delay(void * function, int arity, ...) | Returns a promise to evaluate `function` on the passed variadic arguments at some point in the future. 0 ≤ arity ≤ 15 |
 | promise * promiseWrap(void * x) | Wraps an already evaluated value in a promise. This is useful for when a function expect a promise, but you do not need to delay evaluation (such as `streamcons`). Practically equivalent to `delay( &id, 1, x)`. |
