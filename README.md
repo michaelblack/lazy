@@ -39,5 +39,6 @@ apply.h
 apply.h contains functions to apply function pointers to arrays of arguments. It's used internally in lazy.h.
 
 | Signature | Description |
+| --------- | ----------- |
 | `void * apply[0-15](void * f, void ** args)` | Fifteen different functions to apply a function pointer cast to (void *) to an array of arguments. The number after the word apply refers to the number of arguments that f takes. |
 | `void * (*apply(int n))(void *, void **)` | Returns the apply function that corresponds with n, e.g. `apply(5)` is the same as `apply5`. 0 ≤ n ≤ 15 |
