@@ -27,9 +27,17 @@ streams.h contains functions for creating and manipulating streams (linked lists
 | `stream * tail(stream * s)` | Fetches the tail of a stream and forces it. |
 | `stream * map(void * (*f)(void *), stream * s)` | Lazily maps the function f to every element of the stream s.|
 | `stream * filter(int (*predicate)(void *), stream * s)` | Lazily filters out all elements of s that do not satisfy the predicate. Note that while filter acts lazily, it will none the less perform the filter greedily until at least one element that satisfies the predicate is found. If no element satisfies the predicate, filter will halt. |
-| `stream * iterate(void * (*f)(void *), void * x)` | Creates a stream of succesive applications of f on x. i.e. `iterate(&f, x)` is `x, f(x), f(f(x)), f(f(f(x))), ...` |
+| `stream * iterate(void * (*f)(void *), void * x)` | Creates a stream of succesive applications of f on x, i.e. `iterate(&f, x)` is `x, f(x), f(f(x)), f(f(f(x))), ...` |
 | `stream * repeat(void * x)` | Creates a stream that consists only of x. Practically equivalent to `iterate(&id, x)`.|
 | `stream * zip2(void * (*f)(void *, void *), stream * s, stream * t)` | Creates a new stream where corresponding elements of s and t are combined using f. |
 | `list * take(int n, stream * s)` | Takes n elements from s and converts them into a list. This function relies on list.h. |
-| `stream * drop(int n, stream * s)` | Drops n elements from the stream. e.g. `drop(2, one_through_infinity)` is `3,4,5,6...` |
+| `stream * drop(int n, stream * s)` | Drops n elements from the stream, e.g. `drop(2, one_through_infinity)` is `3,4,5,6...` |
 | `stream * unfold(pair * (*unfolder)(void *), void * accumulator)` | The unfolder function takes the accumulator returns a pair consisting of 1) The value for the next (or initial) element of the stream and 2) the next accumulator to be used. Relies on pairs.h. | 
+
+apply.h
+-------
+apply.h contains functions to apply function pointers to arrays of arguments. It's used internally in lazy.h.
+
+| Signature | Description |
+| `void * apply[0-15](void * f, void ** args)` | Fifteen different functions to apply a function pointer cast to (void *) to an array of arguments. The number after the word apply refers to the number of arguments that f takes. |
+| `void * (*apply(int n))(void *, void **)` | Returns the apply function that corresponds with n, e.g. `apply(5)` is the same as `apply5`. 0 ≤ n ≤ 15 |
