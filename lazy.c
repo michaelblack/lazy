@@ -25,7 +25,6 @@ void * (*promiseFunction(promise * p))(void **) {
   return p->info.closure.function;
 }
 
-
 void ** promiseArgs(promise * p) {
   return p->info.closure.args;
 }
@@ -46,7 +45,7 @@ promise * promiseWrap(void * a) {
   return p;
 }
 
-promise * delay(void * (*function)(void ** args), int args, ...) {
+promise * delay(void * (*function)(void ** args), void ** args) {
   promise * p = malloc(sizeof(promise));
   
   p->info.closure.function = function;
