@@ -54,28 +54,17 @@ list * take(int n, stream * s) {
   return head;
 }
 
-void * filterhelper(void ** args) {
-  return (void *) filter(args[0], args[1]);
-}
-
-stream * filter(int (*test)(void *), stream * s) {
-  if ((*test)(s->head)) {
-    void ** args = malloc(sizeof(void*)*2);
-    args[0] = test; args[1] = force(s->tail);
-    return streamcons(s->head, delay( &filterhelper, args));
+stream * filter(int (*predicate)(void *), stream * s) {
+  if ((*predicate)(s->head)) {
+    return streamcons(s->head, delay(&filter, 2, predicate, force(s->tail)));
   }
 
-  return filter(test, (stream *) force(s->tail));
+  return filter(predicate, (stream *) force(s->tail));
 }
 
-void * maphelper(void ** args) {
-  return (void *) map(args[0], args[1]);
-}
 
 stream * map(void * (*function)(void *), stream * s) {
-  void ** args = malloc(sizeof(void *) * 2);
-  args[0] = function; args[1] = (stream *) force(s->tail);
-  return streamcons((*function)(s->head), delay(&maphelper, args));
+  return streamcons(function(head(s)), delay(&map, 2, function, force(s->tail)));
 }
 
 void * iteratehelper(void ** args) {
@@ -83,9 +72,7 @@ void * iteratehelper(void ** args) {
 }
 
 stream * iterate(void * (*f)(void *), void * x) {
-  void ** args = malloc(sizeof(void *) * 2);
-  args[0] = f; args[1] = (*f)(x);
-  return streamcons(x, delay(&iteratehelper, args));
+  return streamcons(x, delay(&iterate, 2, f, f(x)));
 }
 
 void * zip2helper(void ** args) {
@@ -93,9 +80,7 @@ void * zip2helper(void ** args) {
 }
 
 stream * zip2(void * (*f)(void *, void *), stream * s1, stream * s2) {
-  void ** args = malloc(3 * sizeof(void *));
-  args[0] = f; args[1] = tail(s1); args[2] = tail(s2);
-  return streamcons( (*f)(head(s1), head(s2)), delay(&zip2helper, args));
+  return streamcons( f(head(s1), head(s2)), delay(&zip2, 3, f, tail(s1), tail(s2)));
 }
 
 
@@ -104,9 +89,8 @@ void * unfoldhelper(void ** args) {
 }
 
 stream * unfold(pair * (*f)(void *), void * acc) {
-  pair * p = (*f)(acc);
-  void ** args = malloc(2 * sizeof(void *));
-  args[0] = f; args[1] = second(p);
-  return streamcons( first(p), delay( &unfoldhelper, args));
+  pair * p = f(acc);
+  void * fst = first(p); void * snd = second(p);
+  free(p);
+  return streamcons( fst, delay(&unfold, 2, f, snd));
 }
-  
