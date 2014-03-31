@@ -40,5 +40,6 @@ apply.h contains functions to apply function pointers to arrays of arguments. It
 
 | Signature | Description |
 | --------- | ----------- |
+| `APPLY_MAX` | The maximum number of arguments that an application can take. If n in `apply(n)` is greater than `APPLY_MAX` it will throw an error. Currently is 15. |
 | `void * apply[0-15](void * f, void ** args)` | Fifteen different functions to apply a function pointer cast to (void *) to an array of arguments. The number after the word apply refers to the number of arguments that f takes, e.g. `apply2(&add, one_and_two)` is `3`.|
 | `void * (*apply(int n))(void *, void **)` | Returns the apply function that corresponds with n, e.g. `apply(5)` is the same as `apply5`. 0 ≤ n ≤ 15 |
