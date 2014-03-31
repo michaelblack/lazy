@@ -1,5 +1,5 @@
-#ifndef LAZY_H
-#define LAZY_H
+#ifndef _LAZY_H
+#define _LAZY_H
 
 typedef struct promise promise;
 
