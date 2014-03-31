@@ -9,6 +9,7 @@ void * times2(void * n);
 int odd(void * n);
 void * add(void * a, void * b);
 pair * fibs_unfolder(void * acc);
+stream * sieve(stream * s, list * d);
 
 int main() {
 
@@ -20,15 +21,16 @@ int main() {
 									 unfold(&fibs_unfolder,
 										(void *)(pairup((void *) 0,
 												(void *) 1)))))));
-     
+  stream * primes = sieve(drop(1,natural_numbers), NULL);     
+
   //prints the first 10 powers of 2
   printf("The first 10 powers of two (testing `iterate`) :\n\t");
   foreach( &print_int, take(10, iterate(&times2, (void *) 1)));
   puts("\n");
 
   //prints the next 10 powers of 2
-  printf("The next 10 powers of two (testing `drop`) :\n\t");
-  foreach( &print_int, take(10, drop(10, iterate(&times2, (void *) 1))));
+  printf("The 11-20th prime numbers (testing `drop`) :\n\t");
+  foreach( &print_int, take(10, drop(10, primes))); 
   puts("\n");
 
   // prints the first 10 even digs
@@ -84,4 +86,14 @@ pair * fibs_unfolder(void * acc) {
   void * added = (void *)((int)fst + (int)snd); 
   return pairup( added,
 		 (void *)(pairup(snd, added)));
+}
+
+stream * sieve(stream * s, list * divs) {
+    void * h = head(s);
+    for(list * l = divs; l != NULL; l = l->tail) {
+        if(((int)h) % ((int)(l->head)) == 0)
+            return sieve(tail(s), divs);
+    }
+
+    return streamCons(h, delay(&sieve, 2, tail(s), listcons(h, divs)));
 }
