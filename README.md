@@ -21,7 +21,7 @@ streams.h contains functions for creating and manipulating streams (linked lists
 
 | Signature | Description |
 | --------- | ----------- |
-| `stream * streamCons(void * head, promise * tail) | Constructs a stream from a value and a promise for the rest of the stream. |
+| `stream * streamCons(void * head, promise * tail)` | Constructs a stream from a value and a promise for the rest of the stream. |
 | `void * head(stream * s)` | Fetches the head of a stream. |
 | `stream * tail(stream * s)` | Fetches the tail of a stream and forces it. |
 | `stream * map(void * (*f)(void *), stream * s)` | Lazily maps the function f to every element of the stream s.|
