@@ -65,3 +65,12 @@ void * force(promise * p) {
   
   return evaluation(p);
 }
+
+void * softForce(promise * p) {
+    if (evaluated(p)) {
+        printf("softForce: promise has been previously forced, unable to reevaluate.\n");
+        exit(1);
+    }
+    return promiseApplier(p)(promiseFunction(p), promiseArgs(p));
+}
+
