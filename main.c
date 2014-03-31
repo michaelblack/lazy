@@ -38,13 +38,18 @@ int main() {
   puts("\n");
 
   //prints a zip test
-  printf("The first 10 of [1,2..] + [3,3..] (testing `zip2`):\n\t");
+  printf("The first 10 of [1,2..] + [3,3..] (testing `zip2`) :\n\t");
   foreach( &print_int, take( 10, zip2( &add, natural_numbers, threes)));
   puts("\n");
 
-  //prints the first 10 fibonnaci numbers
+  //prints the first 15 fibonnaci numbers
   printf("The first 15 fibonacci numbers (testing `unfold`) :\n\t");
   foreach( &print_int, take(15, fibonaccis));
+  puts("\n");
+
+  //prints the first 10 odd fibonacci numbers
+  printf("The first 10 odd fibonacci numbers doubled (testing `map`, `filter`, and `unfold`) :\n\t");
+  foreach( &print_int, take(10, map( &times2, filter(&odd, fibonaccis))));
   puts("\n");
 
 }
