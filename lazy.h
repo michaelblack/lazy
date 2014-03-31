@@ -6,7 +6,7 @@ typedef struct promise promise;
 int evaluated(promise *);
 
 promise * promiseWrap(void *);
-promise * delay(void * (*)(void **), void **);
+promise * delay(void *, int, ...);
 void    * force(promise *);
 
 #endif
