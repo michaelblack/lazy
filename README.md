@@ -7,7 +7,7 @@ The main.c file contains a small program to test the libraries, the make file wi
 
 lazy.h
 ------
-lazy.h contains four functions that work with 'promises'. A promise is a stucture that holds information on how to call a function with already given arguments.
+lazy.h contains functions that work with 'promises'. A promise is a stucture that holds information on how to call a function with already given arguments.
 
 | Signature | Description |
 | --- | --- | 
