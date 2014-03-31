@@ -6,7 +6,7 @@ An implementation of delayed evaluation and streams in c.
 
 lazy.h
 ------
-lazy.h contains three functions that work with 'promises'. A promise is a stucture that holds information on how to call a function with already given arguments.
+lazy.h contains four functions that work with 'promises'. A promise is a stucture that holds information on how to call a function with already given arguments.
 
 `promise * delay(void * function, int arity, ...)` - Returns a promise to evaluate `function` on the passed variadic arguments at some point in the future. 0 ≤ arity ≤ 15
 
