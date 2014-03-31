@@ -1,15 +1,20 @@
 Lazy
 ====
 
-A practice implementation of delayed evaluation and streams in c.
+An implementation of delayed evaluation and streams in c.
 
 
-`lazy.h` contains functions for creating delayed evaluations.
+lazy.h
+------
+lazy.h contains three functions that work with 'promises'. A promise is a stucture that holds information on how to call a function with already given arguments.
 
-`delay(void * function, int arity, ...)` - returns a promise to evaluate `function` on the passed variadic arguments at some point later. 0 ≤ arity ≤ 9
+`promise * delay(void * function, int arity, ...)` - Returns a promise to evaluate `function` on the passed variadic arguments at some point in the future. 0 ≤ arity ≤ 15
 
-`promiseWrap(void * x)` - wraps an already evaluated value in a promise, useful for functions that expect a promise (such as streamcons).
+`promise * promiseWrap(void * x)` - Wraps an already evaluated value in a promise, useful for functions that expect a promise (such as streamcons).
 
-`force(promise * p)` - forces a promise to become evaluated and returns the result. `force` uses memoization so that when it is called again on the same promise, it will not have to recompute the answer.
+`void * force(promise * p)` - Forces a promise to become evaluated and returns the result. `force` uses memoization so that when it is called again on the same promise, it will not have to recompute the answer.
 
-`streams.h` contains functions for creating and manipulating streams. See the header for more details.
+streams.h
+---------
+streams.h contains functions for creating and manipulating streams (linked lists where the tails are delayed).
+See the header for more details.
