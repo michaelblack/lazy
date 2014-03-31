@@ -28,7 +28,6 @@ stream * tail(stream * s) {
   return (stream *)force(s->tail);
 }
 
-
 list * take(int n, stream * s) {
   list * head = listcons(NULL, NULL);
   stream * straveler = s;
@@ -67,26 +66,15 @@ stream * map(void * (*function)(void *), stream * s) {
   return streamcons(function(head(s)), delay(&map, 2, function, force(s->tail)));
 }
 
-void * iteratehelper(void ** args) {
-  return (void *) iterate((void * (*)(void *))args[0], args[1]);
-}
 
 stream * iterate(void * (*f)(void *), void * x) {
   return streamcons(x, delay(&iterate, 2, f, f(x)));
-}
-
-void * zip2helper(void ** args) {
-  return zip2(args[0], args[1], args[2]);
 }
 
 stream * zip2(void * (*f)(void *, void *), stream * s1, stream * s2) {
   return streamcons( f(head(s1), head(s2)), delay(&zip2, 3, f, tail(s1), tail(s2)));
 }
 
-
-void * unfoldhelper(void ** args) {
-  return unfold(args[0], args[1]);
-}
 
 stream * unfold(pair * (*f)(void *), void * acc) {
   pair * p = f(acc);
