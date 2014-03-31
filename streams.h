@@ -6,7 +6,7 @@
 
 typedef struct stream stream;
 
-stream * streamcons(void *, promise *);
+stream * streamCons(void *, promise *);
 void   * head(stream *);
 stream * tail(stream *);
 stream * filter(int (*)(void *), stream *);
@@ -15,12 +15,14 @@ stream * iterate(void * (*)(void *), void *);
 stream * zip2(void * (*)(void *, void *), stream *, stream *);
 stream * unfold(pair * (*)(void *), void *);
 list * take(int, stream *);
+stream * drop(int, stream *);
+stream * repeat(void *);
 
 #endif
 /*
   Descriptions:
   
-  streamcons - Used for contructing a stream (an infinite list), takes a value and a promise for another stream
+  streamCons - Used for contructing a stream (an infinite list), takes a value and a promise for another stream
   head - returns the head of the stream
   tail - forces the tail of the stream and returns it
   filter - takes a predicate p and filters out all elements of a stream for which p is not true
@@ -30,7 +32,8 @@ list * take(int, stream *);
   unfold - keeps building a list by passing along an accumulator. Takes a function that takes the accumulator
   and returns a pair of the new value to be in the list and the new accumulator
   take - turns the first n elements of a stream into a list
-
+  drop - drops the first n elements from a stream
+  repeat - creates a stream of x,x,x,x,x...
 */
 
   

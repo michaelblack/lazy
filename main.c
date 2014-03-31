@@ -15,8 +15,8 @@ int main() {
 
   stream * natural_numbers = iterate(&add1, (void *) 1);
   stream * threes = iterate(&id, (void *) 3);
-  stream * fibonaccis = streamcons( (void *) 0,
-				    promiseWrap( streamcons( (void *) 1,
+  stream * fibonaccis = streamCons( (void *) 0,
+				    promiseWrap( streamCons( (void *) 1,
 							     promiseWrap(
 									 unfold(&fibs_unfolder,
 										(void *)(pairup((void *) 0,
