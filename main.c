@@ -8,13 +8,12 @@ void * add1(void * n);
 void * times2(void * n);
 int odd(void * n);
 void * add(void * a, void * b);
-void * id(void * a);
 pair * fibs_unfolder(void * acc);
 
 int main() {
 
   stream * natural_numbers = iterate(&add1, (void *) 1);
-  stream * threes = iterate(&id, (void *) 3);
+  stream * threes = repeat((void *) 3);
   stream * fibonaccis = streamCons( (void *) 0,
 				    promiseWrap( streamCons( (void *) 1,
 							     promiseWrap(
@@ -25,6 +24,11 @@ int main() {
   //prints the first 10 powers of 2
   printf("The first 10 powers of two (testing `iterate`) :\n\t");
   foreach( &print_int, take(10, iterate(&times2, (void *) 1)));
+  puts("\n");
+
+  //prints the next 10 powers of 2
+  printf("The next 10 powers of two (testing `drop`) :\n\t");
+  foreach( &print_int, take(10, drop(10, iterate(&times2, (void *) 1))));
   puts("\n");
 
   // prints the first 10 even digs
@@ -38,7 +42,7 @@ int main() {
   puts("\n");
 
   //prints a zip test
-  printf("The first 10 of [1,2..] + [3,3..] (testing `zip2`) :\n\t");
+  printf("The first 10 of [1,2..] + [3,3..] (testing `zip2` and `repeat`) :\n\t");
   foreach( &print_int, take( 10, zip2( &add, natural_numbers, threes)));
   puts("\n");
 
@@ -48,7 +52,7 @@ int main() {
   puts("\n");
 
   //prints the first 10 odd fibonacci numbers
-  printf("The first 10 odd fibonacci numbers doubled (testing `map`, `filter`, and `unfold`) :\n\t");
+  printf("The first 10 odd fibonacci numbers doubled (testing combinations of `map`, `filter`, and `unfold`) :\n\t");
   foreach( &print_int, take(10, map( &times2, filter(&odd, fibonaccis))));
   puts("\n");
 
@@ -72,10 +76,6 @@ int odd(void * n) {
 
 void * add(void * a, void * b) {
   return (void *)((int) a + (int)b);
-}
-
-void * id(void * a) {
-  return a;
 }
 
 pair * fibs_unfolder(void * acc) {
