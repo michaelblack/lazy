@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "apply.h"
 #include "lazy.h"
 #include "pairs.h"
 #include "streams.h"

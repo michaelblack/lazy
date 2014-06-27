@@ -5,26 +5,30 @@
 #include "apply.h"
 
 /*
-  Macros to make refactoring easier
+  Acessor macros primarily for easy refactoring.
 */
 
 #define evaluated(p) (p->evaluated)
-#define promiseFunction(p) (p->info.closure.function)
-#define promiseApplier(p) (p->info.closure.applier)
-#define promiseArgs(p) (p->info.closure.args)
+#define functionOf(p) (p->info.delayed.function)
+#define arityOf(p) (p->info.delayed.arity)
+#define argsOf(p) (p->info.delayed.args)
 #define evaluation(p) (p->info.evaluation)
 
 struct promise {
   char evaluated;
   union {
     struct {
-      void * (*applier)(void *, void **);
       void * function;
+      int arity;
       void ** args;
-    } closure;
+    } delayed;
     void * evaluation;
   } info;
 };
+
+int isEvaluated(promise * p) {
+  return (int)(evaluated(p));
+}
 
 /*
   Functions for interacting with promises
@@ -41,15 +45,15 @@ promise * promiseWrap(void * x) {
 promise * delay(void * function, int arity, ...) {
   promise * p = malloc(sizeof(promise));
 
-  promiseApplier(p) = apply(arity);
-  promiseArgs(p) = malloc(arity*sizeof(void *));
+
+  argsOf(p) = malloc(arity*sizeof(void *));
   va_list args; va_start(args, arity);
   for(int i = 0; i < arity; i++)
-    promiseArgs(p)[i] = va_arg(args, void *);
+    argsOf(p)[i] = va_arg(args, void *);
   va_end(args);
   
-  promiseFunction(p) = function;
-  
+  functionOf(p) = function;
+  arityOf(p) = arity;
   evaluated(p) = 0;
   return p;
 }
@@ -58,12 +62,10 @@ void * force(promise * p) {
   if(evaluated(p))
     return evaluation(p);
 
- 
-  evaluation(p) = promiseApplier(p)(promiseFunction(p), promiseArgs(p));
+  free(argsOf(p));  
+  evaluation(p) = apply(arityOf(p))(functionOf(p), argsOf(p));
   evaluated(p) = 1;
-
-  free(promiseArgs(p));
-  
+ 
   return evaluation(p);
 }
 
@@ -72,6 +74,15 @@ void * softForce(promise * p) {
         printf("softForce: promise has been previously forced, unable to reevaluate.\n");
         exit(1);
     }
-    return promiseApplier(p)(promiseFunction(p), promiseArgs(p));
+    return apply(arityOf(p))(functionOf(p), argsOf(p));
 }
 
+void freePromise(promise * p) {
+  if(evaluated(p)) {
+    free(p->info.evaluation);
+  }
+  else {
+    free(p->info.delayed.args);
+  }
+  free(p);
+}

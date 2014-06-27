@@ -12,6 +12,15 @@ void foreach(void (*action)(void *), list * l) {
   if(l == NULL)
     return;
 
-  (*action)(l->head);
+  action(l->head);
   foreach(action, l->tail);
 }
+
+int length(list * l) {
+    int i = 0;
+    list * traveller;
+    for(traveller = l;  traveller != NULL; traveller = traveller->tail)
+        i++;
+    return i;
+}
+

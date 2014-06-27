@@ -29,41 +29,23 @@ stream * tail(stream * s) {
 }
 
 list * take(int n, stream * s) {
-  list * head = listcons(NULL, NULL);
-  stream * straveler = s;
-  list * ltraveler = head;
-
-  if(n<=0)
+  if(s==NULL || n < 1) {
     return NULL;
-  
-  while(1) {
-
-    ltraveler->head = straveler->head;
-    straveler = (stream *) force(straveler->tail);
-
-    if (n == 1) {
-      break;
-    }    
-
-    ltraveler->tail = listcons(NULL,NULL);
-    ltraveler = ltraveler->tail;
-    n--;
   }
-  
-  return head;
+  return listcons(head(s), take(n-1, tail(s)));
 }
 
 stream * filter(int (*predicate)(void *), stream * s) {
-  if ((*predicate)(s->head)) {
-    return streamCons(s->head, delay(&filter, 2, predicate, force(s->tail)));
+  if (predicate(s->head)) {
+    return streamCons(s->head, delay(&filter, 2, predicate, tail(s)));
   }
 
-  return filter(predicate, (stream *) force(s->tail));
+  return filter(predicate, (stream *) tail(s));
 }
 
 
-stream * map(void * (*function)(void *), stream * s) {
-  return streamCons(function(head(s)), delay(&map, 2, function, force(s->tail)));
+stream * map(void * (*f)(void *), stream * s) {
+  return streamCons(f(head(s)), delay(&map, 2, f, tail(s)));
 }
 
 
@@ -83,13 +65,39 @@ stream * unfold(pair * (*f)(void *), void * acc) {
   return streamCons( fst, delay(&unfold, 2, f, snd));
 }
 
+stream * unfoldIO(void * (*f)()) {
+  return streamCons( f(), delay(&unfoldIO, 1, f));
+}
+
 stream * drop(int n, stream * s) {
-  if(n == 0)
+  if(s == NULL || n == 0) {
     return s;
+  }
 
   return drop(n-1, tail(s));
 }
 
 stream * repeat(void * x) {
   return streamCons(x, delay(&repeat, 1, x));
+}
+
+void sequence(void (*f)(void *), stream * s) {
+  if(s == NULL) {
+    return;
+  }
+  f(s->head);
+  sequence(f, tail(s));
+}
+  
+
+// Not tail recursive :/ should fix
+void freeStream(stream * s) {
+  free(head(s));
+  if (!isEvaluated(s->tail)) {
+    freePromise(s->tail);
+  }
+  else {
+    freeStream(tail(s));
+  }
+  free(s);
 }

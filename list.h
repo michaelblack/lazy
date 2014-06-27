@@ -11,5 +11,5 @@ struct list {
 list * listcons(void *, list *);
 
 void foreach(void (*f)(void *), list *);
-
+int length(list *);
 #endif
